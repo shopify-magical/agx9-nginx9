@@ -1,0 +1,16 @@
+agent-crono: FAILED
+agent-final: FAILED
+agent-13gov: FAILED
+agent-aniki: FAILED
+agent-13gov: FAILED
+agent-final: FAILED
+agent-crono: FAILED
+agent-aniki: FAILED
+agent-guide: FAILED
+agent-hypnos: FAILED
+agent-gate: FAILED
+agent-priest: FAILED
+agent-priest: FAILED
+agent-hypnos: FAILED
+agent-guide: FAILED
+agent-gate: FAILED

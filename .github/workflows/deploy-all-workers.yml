@@ -1,0 +1,72 @@
+name: Deploy All Workers
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  discover-workers:
+    runs-on: ubuntu-latest
+    outputs:
+      workers: ${{ steps.find-workers.outputs.workers }}
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+        
+    - name: Find all workers
+      id: find-workers
+      run: |
+        workers=$(find . -maxdepth 2 -name "wrangler.jsonc" -o -name "wrangler.toml" | sed 's|^\./||' | sed 's|/wrangler.*||' | sort -u | jq -R -s -c 'split("\n")[:-1]')
+        echo "workers=$workers" >> $GITHUB_OUTPUT
+        
+  deploy-workers:
+    needs: discover-workers
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        worker: ${{ fromJson(needs.discover-workers.outputs.workers) }}
+      max-parallel: 5
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+        
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: ${{ matrix.worker }}/package-lock.json
+        
+    - name: Install dependencies
+      run: |
+        cd ${{ matrix.worker }}
+        if [[ -f "package.json" ]]; then
+          npm ci
+        fi
+        
+    - name: Add account_id to wrangler config
+      run: |
+        cd ${{ matrix.worker }}
+        if [[ -f "wrangler.jsonc" ]]; then
+          # Check if account_id exists, if not add it
+          if ! grep -q "account_id" wrangler.jsonc; then
+            jq '. + {"account_id": "5f67b9fe81880bb705be33df7ac44c56"}' wrangler.jsonc > temp.json && mv temp.json wrangler.jsonc
+          fi
+        elif [[ -f "wrangler.toml" ]]; then
+          if ! grep -q "account_id" wrangler.toml; then
+            echo 'account_id = "5f67b9fe81880bb705be33df7ac44c56"' >> wrangler.toml
+          fi
+        fi
+        
+    - name: Deploy to Cloudflare Workers
+      uses: cloudflare/wrangler-action@v3
+      with:
+        apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        workingDirectory: ${{ matrix.worker }}
+        command: deploy
+      continue-on-error: true
