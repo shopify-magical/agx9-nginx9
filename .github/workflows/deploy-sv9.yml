@@ -1,0 +1,37 @@
+name: Deploy sv9 Worker
+
+on:
+  push:
+    branches: [ main, master ]
+    paths:
+      - 'sv9/**'
+      - '.github/workflows/deploy-sv9.yml'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy sv9 to Cloudflare Workers
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: sv9/package-lock.json
+        
+    - name: Install dependencies
+      run: |
+        cd sv9
+        npm ci
+        
+    - name: Deploy to Cloudflare Workers
+      uses: cloudflare/wrangler-action@v3
+      with:
+        apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        workingDirectory: sv9
+        command: deploy

@@ -1,0 +1,32 @@
+{
+  "name": "architect-workers",
+  "version": "1.0.0",
+  "description": "Cloudflare Workers for AI Architect Builder - TTS and LLM Services",
+  "main": "tts-worker.js",
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "deploy:tts": "wrangler deploy tts-worker.js --name architect-tts-worker",
+    "deploy:llm": "wrangler deploy llm-worker.js --name architect-llm-worker",
+    "dev": "wrangler dev",
+    "dev:tts": "wrangler dev tts-worker.js",
+    "dev:llm": "wrangler dev llm-worker.js",
+    "tail": "wrangler tail",
+    "secret:list": "wrangler secret list",
+    "test": "node test/workers.test.js"
+  },
+  "keywords": [
+    "cloudflare",
+    "workers",
+    "ai",
+    "tts",
+    "llm",
+    "architect",
+    "mobile"
+  ],
+  "author": "AI Architect Builder Team",
+  "license": "MIT",
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20240320.0",
+    "wrangler": "^4.75.0"
+  }
+}

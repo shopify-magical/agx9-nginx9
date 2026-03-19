@@ -1,0 +1,85 @@
+/* Chat Interface Styles */
+body { 
+  background-color: #0f111a; 
+  color: white; 
+}
+
+[v-cloak] { 
+  display: none; 
+}
+
+.monaco-editor .margin { 
+  display: none !important; 
+}
+
+.monaco-editor-background { 
+  background-color: transparent !important; 
+}
+
+/* Cool Animations */
+.glow-focus {
+  box-shadow: 0 0 20px -5px rgba(99, 102, 241, 0.3);
+  border-color: rgba(99, 102, 241, 0.5) !important;
+}
+
+@keyframes spin-slow {
+  100% { transform: rotate(360deg); }
+}
+
+.animate-spin-slow {
+  transform-origin: 50px 50px;
+  animation: spin-slow 24s linear infinite;
+}
+
+/* Tailwind Custom Colors - These will be handled by tailwind.config.js */
+/* The brand colors are defined in the Tailwind config */
+
+/* Custom component styles */
+.chat-container {
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+}
+
+.editor-placeholder {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  color: #94a3b8;
+  font-size: 0.875rem;
+  pointer-events: none;
+  z-index: 10;
+  font-weight: 500;
+  letter-spacing: 0.025em;
+}
+
+/* Button hover states */
+.btn-hover {
+  transition: all 0.3s ease;
+}
+
+.btn-hover:hover {
+  transform: translateY(-1px);
+}
+
+/* Focus states */
+.focus-ring {
+  transition: all 0.2s ease;
+}
+
+.focus-ring:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Loading animation for optimizing */
+.optimize-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: .5;
+  }
+}

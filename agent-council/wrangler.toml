@@ -1,0 +1,10 @@
+name = "agent-council"
+main = "src/index.ts"
+compatibility_date = "2024-01-01"
+
+[[env.production.vars]]
+AGENT_ROLE = "council"
+AGENT_NETWORK = "agent-network"
+
+[env.production]
+vars = { ENVIRONMENT = "production" }

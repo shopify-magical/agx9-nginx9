@@ -1,0 +1,6 @@
+name = "agent-final"
+main = "src/index.js"
+compatibility_date = "2024-03-19"
+
+[ai]
+binding = "AI"
